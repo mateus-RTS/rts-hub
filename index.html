@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -8,6 +9,18 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#1A1A1B;color:#F9F5EF;font-family:'Ubuntu',sans-serif;min-height:100vh;overflow:hidden}
+
+#login{position:fixed;inset:0;background:#1A1A1B;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99}
+#login.hidden{display:none}
+.login-box{background:#1e1e1f;border:1px solid #2d2d2e;border-radius:14px;padding:36px 32px;width:300px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.login-box svg{margin-bottom:4px}
+.login-title{font-size:14px;font-weight:600;letter-spacing:1px;text-align:center}
+.login-sub{font-size:11px;color:#6b7280;text-align:center;margin-top:-8px}
+.login-input{width:100%;background:#111112;border:1px solid #2d2d2e;color:#F9F5EF;padding:10px 14px;border-radius:8px;font-size:13px;font-family:‘Ubuntu’,sans-serif;outline:none;transition:border-color .2s;text-align:center;letter-spacing:2px}
+.login-input:focus{border-color:#3D754E}
+.login-btn{width:100%;background:#3D754E;border:none;color:#fff;padding:10px;border-radius:8px;font-size:13px;font-family:‘Ubuntu’,sans-serif;cursor:pointer;font-weight:500;transition:background .2s}
+.login-btn:hover{background:#4a8f5f}
+.login-err{font-size:11px;color:#f87171;display:none;text-align:center}
 
 #home{position:fixed;inset:0;background:#1A1A1B;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;transition:opacity .35s,transform .35s}
 #home.hidden{opacity:0;pointer-events:none;transform:scale(1.02)}
@@ -21,7 +34,7 @@ body{background:#1A1A1B;color:#F9F5EF;font-family:'Ubuntu',sans-serif;min-height
 
 .cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
 .card{width:260px;background:#1e1e1f;border:1px solid #2d2d2e;border-radius:14px;padding:28px 24px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;display:block;text-decoration:none;color:inherit}
-.card::before{content:'';position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at 60% 0%,rgba(61,117,78,.12),transparent 65%);opacity:0;transition:opacity .3s}
+.card::before{content:’’;position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at 60% 0%,rgba(61,117,78,.12),transparent 65%);opacity:0;transition:opacity .3s}
 .card:hover{border-color:#3D754E;transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
 .card:hover::before{opacity:1}
 .card-icon{width:44px;height:44px;background:rgba(61,117,78,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:background .25s}
@@ -37,14 +50,30 @@ body{background:#1A1A1B;color:#F9F5EF;font-family:'Ubuntu',sans-serif;min-height
 #frame-view{position:fixed;inset:0;display:none;flex-direction:column;z-index:20}
 #frame-view.active{display:flex}
 .fv-bar{height:44px;background:#111112;border-bottom:1px solid #2d2d2e;display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0}
-.fv-back{display:flex;align-items:center;gap:7px;background:transparent;border:1px solid #2d2d2e;color:#F9F5EF;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-family:'Ubuntu',sans-serif;transition:all .2s}
+.fv-back{display:flex;align-items:center;gap:7px;background:transparent;border:1px solid #2d2d2e;color:#F9F5EF;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-family:‘Ubuntu’,sans-serif;transition:all .2s}
 .fv-back:hover{border-color:#3D754E;background:rgba(61,117,78,.1)}
 .fv-dot{width:7px;height:7px;border-radius:50%;background:#3D754E;flex-shrink:0}
 .fv-title{font-size:13px;font-weight:500;color:#aaa}
 #dash-frame{flex:1;border:none;width:100%;height:100%;display:block}
 </style>
+
 </head>
 <body>
+
+<div id="login">
+  <div class="login-box">
+    <svg width="44" height="42" viewBox="0 0 167 158" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M164.94 60.9413C165.903 61.6542 166.298 62.904 165.921 64.0416L135.811 154.472L135.486 155.452C135.106 156.593 134.034 157.357 132.833 157.348L131.855 157.342L33.2545 156.65H32.7288C31.5255 156.638 30.462 155.859 30.1004 154.712L29.9576 154.257L0.145566 60.4256L0.127335 60.371C-0.231224 59.2425 0.185069 58.0109 1.15439 57.3283L81.7389 0.591546L82.5775 0L83.3676 0.591546L122.441 29.7563L121.986 31.2002L82.5775 3.4249L6.04962 60.5925L35.7462 149.707L128.801 149.051L158.364 56.0724L164.94 60.9383V60.9413Z" fill="#3D754E"/>
+      <path d="M150.858 50.5225L122.353 135.981L122.025 136.967C121.645 138.108 120.569 138.872 119.363 138.86L118.394 138.851L46.7062 138.159L46.1714 138.153C44.9681 138.141 43.9107 137.358 43.5521 136.212L43.4124 135.766L21.9171 67.4892L21.8928 67.4164C21.5373 66.2909 21.9566 65.0684 22.9259 64.3919L81.7386 23.4479L81.7781 23.4206C82.2582 23.0838 82.8994 23.096 83.3673 23.4479L116.561 48.3322L116.096 49.7974L82.5803 26.2843L27.8211 67.6409L49.1949 131.209L115.343 130.572L142.669 44.4614L150.861 50.5225H150.858Z" fill="#3D754E"/>
+      <path d="M134.058 38.0893L107.947 116.188L107.615 117.183C107.233 118.33 106.148 119.095 104.938 119.076L103.99 119.061L61.1184 118.37L60.5592 118.36C59.359 118.342 58.3076 117.554 57.9551 116.407C55.6275 108.835 47.5022 82.434 45.1929 74.9259C44.8495 73.8126 45.2749 72.6082 46.2412 71.953L81.7446 47.915L81.8053 47.8725C82.2824 47.5479 82.9144 47.5661 83.3733 47.915L110.265 68.2338L109.806 69.6808L82.6015 50.7544L51.1364 75.1655L63.5857 111.401L100.93 110.798L125.872 32.0312L134.064 38.0893H134.058Z" fill="#3D754E"/>
+    </svg>
+    <div class="login-title">RTS PARTNERS</div>
+    <div class="login-sub">Acesso restrito</div>
+    <input class="login-input" id="pwInput" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
+    <div class="login-err" id="pwErr">Senha incorreta</div>
+    <button class="login-btn" onclick="checkPw()">Entrar</button>
+  </div>
+</div>
 
 <div id="home">
   <div class="hub-header">
@@ -73,18 +102,21 @@ body{background:#1A1A1B;color:#F9F5EF;font-family:'Ubuntu',sans-serif;min-height
       <div class="card-arrow">→</div>
     </div>
 
-    <div class="card" onclick="window.location.href='https://mateus-rts.github.io/rts-clientes/'">
-      <div class="card-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#3D754E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-          <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-          <circle cx="17" cy="9" r="2.5"/><path d="M21 21v-1.5a3 3 0 0 0-2-2.83"/>
-        </svg>
-      </div>
-      <div class="card-title">Dashboard de Clientes</div>
-      <div class="card-desc">Custódia, perfil, comportamento e análise por banker. Jan/25 – Fev/26.</div>
-      <div class="card-tag">CLIENTES</div>
-      <div class="card-arrow">→</div>
-    </div>
+```
+<div class="card" onclick="window.location.href='https://mateus-rts.github.io/rts-clientes/'">
+  <div class="card-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#3D754E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+      <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+      <circle cx="17" cy="9" r="2.5"/><path d="M21 21v-1.5a3 3 0 0 0-2-2.83"/>
+    </svg>
+  </div>
+  <div class="card-title">Dashboard de Clientes</div>
+  <div class="card-desc">Custódia, perfil, comportamento e análise por banker. Jan/25 – Fev/26.</div>
+  <div class="card-tag">CLIENTES</div>
+  <div class="card-arrow">→</div>
+</div>
+```
+
   </div>
 
   <div class="hub-footer">RTS PARTNERS · GESTÃO INTERNA · CONFIDENCIAL</div>
